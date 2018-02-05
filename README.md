@@ -1,7 +1,7 @@
 # Warehouse manager#
 Warehouse manager is simple application which helps manage warehouse. 
 
-Application is under development. 
+Application is still under development. 
 
 
 ### Build With ###

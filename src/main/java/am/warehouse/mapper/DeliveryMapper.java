@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class DeliveryMapper {
 
     public Delivery mapWarehouseInDtoToWarehouseIn(DeliveryDto deliveryDto) {
-        return new Delivery(deliveryDto.getId(), deliveryDto.getProductId(), deliveryDto.getSupplierId(), deliveryDto.getProductIndividualNumber(), deliveryDto.getUnitPrice(), deliveryDto.getUnitsChange(), deliveryDto.getTransactionValue());
+        return new Delivery(deliveryDto.getId(), deliveryDto.getProductId(), deliveryDto.getSupplierId(), deliveryDto.getProductIndividualNumber(), deliveryDto.getUnitPrice(), deliveryDto.getUnits(), deliveryDto.getTransactionValue());
     }
 
     public DeliveryDto mapWarehouseInToWarehouseInDto(Delivery delivery) {

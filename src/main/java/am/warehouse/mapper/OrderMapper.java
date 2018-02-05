@@ -5,10 +5,10 @@ import am.warehouse.domain.order.OrderDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SaleMapper {
+public class OrderMapper {
 
     public Order mapSaleDtoToWSale(OrderDto saleDto) {
-        return new Order(saleDto.getId(), saleDto.getProductId(), saleDto.getClientId(), saleDto.getProductIndividualNumber(),saleDto.getUnitPrice(), saleDto.getUnitsChange(), saleDto.getTransactionValue());
+        return new Order(saleDto.getId(), saleDto.getProductId(), saleDto.getClientId(), saleDto.getProductIndividualNumber(),saleDto.getUnitPrice(), saleDto.getUnits(), saleDto.getTransactionValue());
     }
 
     public OrderDto mapSaleToSaleDto(Order sale) {

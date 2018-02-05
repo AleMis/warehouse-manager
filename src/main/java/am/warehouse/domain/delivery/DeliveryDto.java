@@ -15,6 +15,6 @@ public class DeliveryDto {
     private Long supplierId;
     private String productIndividualNumber;
     private BigDecimal unitPrice;
-    private Integer unitsChange;
+    private Integer units;
     private BigDecimal transactionValue;
 }

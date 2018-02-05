@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("v1/warehouse_manager")
 public class WarehouseManagerController {
@@ -44,7 +46,7 @@ public class WarehouseManagerController {
     private SupplierMapper supplierMapper;
 
     @Autowired
-    private SaleMapper saleMapper;
+    private OrderMapper orderMapper;
 
     @Autowired
     private OrderService salesService;
@@ -66,6 +68,11 @@ public class WarehouseManagerController {
     @RequestMapping(method = RequestMethod.GET, value = "/product")
     private ProductDto getProduct(@RequestParam Long productId) throws ProductNotFoundException {
         return productMapper.mapProductToProductDto(dbService.getProductById(productId).orElseThrow(ProductNotFoundException::new));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/products")
+    private List<ProductDto> getAllProducts() throws ProductNotFoundException {
+        return productMapper.mapProductListToProductDtoList(dbService.getAllProducts());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_discount")
@@ -112,18 +119,18 @@ public class WarehouseManagerController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_order")
     private OrderDto addNewSale(@RequestBody OrderDto orderDto) {
-        Order order  = saleMapper.mapSaleDtoToWSale(orderDto);
-        OrderDto newSale = null;
-
+        Order order  = orderMapper.mapSaleDtoToWSale(orderDto);
+        OrderDto newOrder = null;
+        System.out.println(order);
         boolean status = salesService.checkProductAvailability(order);
         if(status) {
-            newSale = saleMapper.mapSaleToSaleDto(dbService.saveSale(order));
+            newOrder = orderMapper.mapSaleToSaleDto(dbService.saveSale(order));
             warehouseService.updateWarehouseAfterNewOrder(order);
             LOGGER.info("New order was added to order database!");
         }else {
             LOGGER.error("Product [" + orderDto.getProductIndividualNumber() + "] order cannot be executed.");
         }
-        return newSale;
+        return newOrder;
     }
 
 }

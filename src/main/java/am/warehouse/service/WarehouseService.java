@@ -25,12 +25,12 @@ public class WarehouseService {
 
             if (warehouse == null) {
                 LOGGER.info("Product [" + delivery.getProductIndividualNumber() + "] not found in warehouse");
-                warehouse = saveNetProductInWarehouse(delivery);
+                warehouse = saveNewProductInWarehouse(delivery);
                 LOGGER.info("Product [" + delivery.getProductIndividualNumber() + "] add to warehouse!");
 
             } else {
                 LOGGER.info("Product status [" + delivery.getProductIndividualNumber() + "] updated in warehouse!");
-                warehouse = updateProductStocksInWarehosue(delivery);
+                warehouse = updateProductStocksInWarehouse(delivery);
             }
 
         } else {
@@ -52,15 +52,20 @@ public class WarehouseService {
         return dbService.findProductByIndividualNumber(productIndividualNumber).get().getId();
     }
 
-    private Warehouse saveNetProductInWarehouse(Delivery delivery) {
+    private Warehouse saveNewProductInWarehouse(Delivery delivery) {
         Long productId = getProductId(delivery.getProductIndividualNumber());
         Warehouse warehouse = new Warehouse(null, productId, delivery.getProductIndividualNumber(), delivery.getUnits());
         return dbService.saveWarehouse(warehouse);
     }
 
-    private Warehouse updateProductStocksInWarehosue(Delivery delivery) {
+    private Warehouse updateProductStocksInWarehouse(Delivery delivery) {
         Warehouse warehouse = getProductCurrentWarehouseStatus(delivery);
-        warehouse.setUnits(warehouse.getUnits() + delivery.getUnits());
+        Integer warehouseUnits = 0;
+        if(warehouse.getUnits() != null) {
+            warehouseUnits = warehouse.getUnits();
+        }
+        warehouse.setUnits(warehouseUnits + delivery.getUnits());
+        System.out.println(warehouse.getUnits());
         return warehouse;
     }
 

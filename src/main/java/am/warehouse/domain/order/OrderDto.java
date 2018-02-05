@@ -16,6 +16,6 @@ public class OrderDto {
     private Long clientId;
     private String productIndividualNumber;
     private BigDecimal unitPrice;
-    private Integer unitsChange;
+    private Integer units;
     private BigDecimal transactionValue;
 }

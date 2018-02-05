@@ -102,4 +102,8 @@ public class DbService {
     public List<Delivery> getAllDeliveryForProduct(String productIndividualNumber) {
         return deliveryRepository.findAllByProductIndividualNumber(productIndividualNumber);
     }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 }
