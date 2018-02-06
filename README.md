@@ -19,4 +19,4 @@ Application is still under development.
 3. Update 'spring.datasource.username' and 'spring.datasource.password' in application.properties file according to your database settings. 
 4. Create tables base on queries provided in db_scheme.sql file.
 5. Build project using 'gradlew build' command. 
-6. Run the application. You can test application using f.e. Postman. 
+6. Run the application. You can test application using eg. Postman. 
