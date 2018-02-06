@@ -1,8 +1,9 @@
-package am.warehouse.service;
+package am.warehouse.validation;
 
 import am.warehouse.domain.delivery.Delivery;
 import am.warehouse.domain.order.Order;
 import am.warehouse.domain.warehouse.Warehouse;
+import am.warehouse.service.DbService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class WarehouseService {
+public class WarehouseValidation {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseValidation.class);
 
     @Autowired
     private DbService dbService;

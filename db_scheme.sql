@@ -1,6 +1,6 @@
 create database 'warehouse_manger';
 
-create table products(id int not null auto_increment, product_name varchar(255), product_individual_number varchar(20) ,product_description varchar(255), product_manufacturer varchar(50), base_price DECIMAL(12,2), current_discount DECIMAL(4,3), price_after_discount DECIMAL(12,2), primary key (id));
+create table products(id int not null auto_increment, product_name varchar(255), product_individual_number varchar(20) ,product_description varchar(255), product_manufacturer varchar(50), base_price DECIMAL(12,2), primary key (id));
 create table clients(id int not null auto_increment, name varchar(255), short_name varchar(30), country varchar(60), city varchar(60), address varchar(60), primary key (id));
 create table suppliers(id int not null auto_increment, name varchar(255), short_name varchar(30), country varchar(60), city varchar(60), address varchar(60), primary key (id));
 

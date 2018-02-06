@@ -9,14 +9,12 @@ import am.warehouse.domain.order.Order;
 import am.warehouse.domain.order.OrderDto;
 import am.warehouse.domain.supplier.SupplierDto;
 import am.warehouse.exceptions.ClientNotFoundException;
-import am.warehouse.exceptions.OfferNotFoundException;
+import am.warehouse.exceptions.DiscountNotFoundException;
 import am.warehouse.exceptions.ProductNotFoundException;
 import am.warehouse.exceptions.SupplierNotFoundException;
 import am.warehouse.mapper.*;
-import am.warehouse.service.DbService;
-import am.warehouse.service.DiscountService;
-import am.warehouse.service.OrderService;
-import am.warehouse.service.WarehouseService;
+import am.warehouse.service.*;
+import am.warehouse.validation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +47,19 @@ public class WarehouseManagerController {
     private OrderMapper orderMapper;
 
     @Autowired
-    private OrderService salesService;
+    private OrderValidation orderValidation;
 
     @Autowired
-    private WarehouseService warehouseService;
+    private WarehouseValidation warehouseValidation;
 
     @Autowired
-    private DeliveryMapper deliveryMapper;
+    private ProductValidation productValidation;
 
     @Autowired
-    private DiscountService discountService;
+    private DiscountValidation discountValidation;
+
+    @Autowired
+    private DeliveryValidation deliveryValidation;
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_product")
     private ProductDto saveProduct(@RequestBody ProductDto productDto) {
@@ -67,26 +68,22 @@ public class WarehouseManagerController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/product")
     private ProductDto getProduct(@RequestParam Long productId) throws ProductNotFoundException {
-        return productMapper.mapProductToProductDto(dbService.getProductById(productId).orElseThrow(ProductNotFoundException::new));
+        return productValidation.getCurrentProductData(productId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/products")
     private List<ProductDto> getAllProducts() throws ProductNotFoundException {
-        return productMapper.mapProductListToProductDtoList(dbService.getAllProducts());
+        return productValidation.getCurrentDataForAllProducts();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_discount")
     private DiscountDto saveDiscount(@RequestBody DiscountDto discountDto) {
-        DiscountDto createdDiscount = null;
-        if(discountService.updateProductDiscount(discountMapper.mapDiscountDtoToDiscount(discountDto))) {
-            createdDiscount = discountMapper.mapDiscountToDiscountDto(dbService.saveOffer(discountMapper.mapDiscountDtoToDiscount(discountDto)));
-        }
-        return createdDiscount;
+        return discountValidation.checkDiscount(discountDto);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/discount")
-    private DiscountDto getOffer(@RequestParam Long discountId) throws OfferNotFoundException {
-        return discountMapper.mapDiscountToDiscountDto(dbService.getOfferById(discountId).orElseThrow(OfferNotFoundException::new));
+    private DiscountDto getOffer(@RequestParam Long discountId) throws DiscountNotFoundException {
+        return discountMapper.mapDiscountToDiscountDto(dbService.getDiscountById(discountId).orElseThrow(DiscountNotFoundException::new));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_client")
@@ -111,26 +108,22 @@ public class WarehouseManagerController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_delivery")
     private DeliveryDto addNewDelivery(@RequestBody DeliveryDto deliveryDto) {
-        Delivery delivery = dbService.saveDelivery(deliveryMapper.mapWarehouseInDtoToWarehouseIn(deliveryDto));
-        warehouseService.updateWarehouseAfterDelivery(delivery);
-        return deliveryMapper.mapWarehouseInToWarehouseInDto(delivery);
+        return deliveryValidation.checkProductForDeliveryPurpose(deliveryDto);
     }
-
 
     @RequestMapping(method = RequestMethod.POST, value = "/create_order")
     private OrderDto addNewSale(@RequestBody OrderDto orderDto) {
         Order order  = orderMapper.mapSaleDtoToWSale(orderDto);
         OrderDto newOrder = null;
         System.out.println(order);
-        boolean status = salesService.checkProductAvailability(order);
+        boolean status = orderValidation.checkProductAvailability(order);
         if(status) {
             newOrder = orderMapper.mapSaleToSaleDto(dbService.saveSale(order));
-            warehouseService.updateWarehouseAfterNewOrder(order);
+            warehouseValidation.updateWarehouseAfterNewOrder(order);
             LOGGER.info("New order was added to order database!");
         }else {
             LOGGER.error("Product [" + orderDto.getProductIndividualNumber() + "] order cannot be executed.");
         }
         return newOrder;
     }
-
 }

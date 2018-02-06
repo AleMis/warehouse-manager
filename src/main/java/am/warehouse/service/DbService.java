@@ -21,7 +21,7 @@ public class DbService {
     ClientRepository clientRepository;
 
     @Autowired
-    OfferRepository offerRepository;
+    DiscountRepository discountRepository;
 
     @Autowired
     ProductRepository productRepository;
@@ -30,7 +30,7 @@ public class DbService {
     SupplierRepository supplierRepository;
 
     @Autowired
-    SaleRepository saleRepository;
+    OrderRepository orderRepository;
 
     @Autowired
     DeliveryRepository deliveryRepository;
@@ -51,12 +51,16 @@ public class DbService {
         return productRepository.findByIndividualNumber(individualNumber);
     }
 
-    public Discount saveOffer(Discount offer) {
-        return offerRepository.save(offer);
+    public Discount saveDiscount(Discount offer) {
+        return discountRepository.save(offer);
     }
 
-    public Optional<Discount> getOfferById(Long id) {
-        return offerRepository.findById(id);
+    public Optional<Discount> getDiscountById(Long id) {
+        return discountRepository.findById(id);
+    }
+
+    public Optional<Discount> getDiscountByProductIndividualNumber(String prductIndividualNumber) {
+        return discountRepository.findByProductIndividualNumber(prductIndividualNumber);
     }
 
     public Client saveClient(Client client) {
@@ -84,11 +88,11 @@ public class DbService {
     }
 
     public Order saveSale(Order sale) {
-        return saleRepository.save(sale);
+        return orderRepository.save(sale);
     }
 
     public Optional<Order> getSale(Long id) {
-        return saleRepository.findById(id);
+        return orderRepository.findById(id);
     }
 
     public Warehouse saveWarehouse(Warehouse warehouse) {
@@ -105,5 +109,9 @@ public class DbService {
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public List<Discount> getAllDiscounts() {
+        return discountRepository.findAll();
     }
 }

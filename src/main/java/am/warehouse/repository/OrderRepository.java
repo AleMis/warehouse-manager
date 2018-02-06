@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Transactional
 @Repository
-public interface SaleRepository extends CrudRepository<Order, Long>{
+public interface OrderRepository extends CrudRepository<Order, Long>{
 
     @Override
     Order save(Order warehouseOut);

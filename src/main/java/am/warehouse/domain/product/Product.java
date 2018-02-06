@@ -37,11 +37,4 @@ public class Product {
 
     @Column(name = "base_price")
     private BigDecimal basePrice;
-
-    @Column(name = "current_discount")
-    private Double currentDiscount;
-
-    @Column(name = "price_after_discount")
-    private BigDecimal priceAfterDiscount;
-
 }

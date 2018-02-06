@@ -1,12 +1,13 @@
-package am.warehouse.service;
+package am.warehouse.validation;
 
 import am.warehouse.domain.order.Order;
 import am.warehouse.domain.warehouse.Warehouse;
+import am.warehouse.service.DbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderService {
+public class OrderValidation {
 
     @Autowired
     private DbService dbService;
